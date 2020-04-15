@@ -13,10 +13,15 @@ import (
 )
 
 var (
+	host  string
+	port  string
 	items []models.Item
 )
 
 func init() {
+	host = ""
+	port = "0333"
+
 	items = append(items, models.Item{Id: 1, Title: "Title1", Description: "Description1"})
 	items = append(items, models.Item{Id: 2, Title: "Title2", Description: "Description2"})
 	items = append(items, models.Item{Id: 3, Title: "Title3", Description: "Description3"})
@@ -26,11 +31,11 @@ func main() {
 	r := mux.NewRouter()
 
 	s := r.PathPrefix("/item").Subrouter()
-
 	s.HandleFunc("/", getItems).Methods("GET")
 	s.HandleFunc("/{id}", getItemByID).Methods("GET")
 
-	log.Fatal(http.ListenAndServe(":0333", r))
+	log.Printf("Running on " + host + ":" + port)
+	log.Fatal(http.ListenAndServe(host+":"+port, r))
 }
 
 func getItems(w http.ResponseWriter, r *http.Request) {
